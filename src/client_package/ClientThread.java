@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import server_package.Command;
 import server_package.OutputProcessor;
+import server_package.RegexParser;
 
 public class ClientThread extends Thread {
 	private Socket client;
@@ -20,8 +21,7 @@ public class ClientThread extends Thread {
 
 	public ClientThread(Socket client) throws IOException {
 		this.client = client;
-		clientCom = new ConcurrentLinkedQueue<String>();
-		
+		clientCom = new ConcurrentLinkedQueue<String>();	
 	}
 
 	public void run() {
@@ -30,25 +30,22 @@ public class ClientThread extends Thread {
 			while (true) {
 				char temp;
 				String msg = "";
-				int available = client.getInputStream().available();
 				while (cin.ready()) {
 					temp = (char) cin.read();
 					msg += temp;
-					System.out.println("message: " + msg);
-					Command c = new Command(this, msg);
-					OutputProcessor.addToInputQueue(c);
-					msg = "";
-					/*
+					//System.out.println("message: " + msg);
 					ArrayList<String> check = RegexParser.matches("(.*) \r\n$", msg);
 					if(!check.isEmpty()) {
+						System.out.println("Check 0: " + check.get(0));
 						System.out.println("Check 1: " + check.get(1));
 						Command c = new Command(this, check.get(1));
+						System.out.println("testing before OutputProcessor.addToInputQueue(c)");
+                              //System.out.println(OutputProcessor.getInputQueue().size());
 						OutputProcessor.addToInputQueue(c);
+						
 						msg = "";
 					}
-					*/
 				}
-				
 
 				if (!clientCom.isEmpty()) {
 					byte[] encoded = clientCom.poll().getBytes(Charset.forName("UTF-8"));

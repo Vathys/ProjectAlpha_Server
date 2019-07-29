@@ -1,18 +1,10 @@
 package server_package;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.Charset;
-import java.time.Duration;
-import java.time.Instant;
+import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -23,10 +15,14 @@ import client_package.ClientThread;
 public class HubServer extends Thread {
 
 	private ServerSocket server;
+	//List of connected Clients
 	private ArrayList<ClientThread> connectedClients;
+	//
 	private BlockingQueue<String> comClients;
+	//Private class that waits for clients to connect
 	private ClientCollector collector;
 	private BlockingQueue<String> rawCommands;
+	private ArrayList<Files> projectFiles;
 	// private ArrayList<ServerThread> connectedServers;
 
 	public HubServer() {
@@ -47,15 +43,12 @@ public class HubServer extends Thread {
 
 	public void run() {
 		while (true) {
+		     System.out.println("HubServer run method running...");
 			String com;
 			Command out;
-			try {
-				out = OutputProcessor.getInputQueue().take();
-			} catch (InterruptedException e1) {
-				out = null;
-				e1.printStackTrace();
-			}
+			out = OutputProcessor.takeFromInputQueue();
 
+			System.out.println(out.response());
 			
 			//processing the Command out
 			
@@ -99,15 +92,18 @@ public class HubServer extends Thread {
 		public void run() {
 			try {
 				System.out.println("Waiting for client on port " + hub.server.getLocalPort() + " at address "
-						+ InetAddress.getLocalHost());
+						+ hub.server.getInetAddress().getLocalHost());
 				while (true) {
 					Socket client = null;
-
 					client = hub.server.accept();
-
+					
 					System.out.println("Connected to " + client.getRemoteSocketAddress());
 					ClientThread ct = new ClientThread(client);
 					hub.addClient(ct);
+
+					if (hub.getConnectedClients().size() == 1) {
+						//Initiate starting the document
+					}
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

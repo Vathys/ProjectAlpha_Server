@@ -6,5 +6,4 @@ public class Main {
 		Thread t = new HubServer();
 		t.start();
 	}
-	
 }

@@ -30,12 +30,14 @@ public class OutputProcessor extends Thread {
 		}
 	}
 
-	public synchronized static void addToOutputQueue(String com) {
+	public static synchronized void addToOutputQueue(String com) {
 		clientOutputQueue.add(com);
 	}
 	
-	public synchronized static void addToInputQueue(Command input) {
+	public static void addToInputQueue(Command input) {
+	     System.out.println("adding input");
 		clientInputQueue.add(input);
+		System.out.println("input added");
 	}
 	
 	public synchronized static BlockingQueue<Command> getInputQueue() {
@@ -46,7 +48,6 @@ public class OutputProcessor extends Thread {
 		try {
 			return clientInputQueue.take();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
