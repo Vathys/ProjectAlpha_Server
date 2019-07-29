@@ -33,14 +33,10 @@ public class ClientThread extends Thread {
 				while (cin.ready()) {
 					temp = (char) cin.read();
 					msg += temp;
-					//System.out.println("message: " + msg);
 					ArrayList<String> check = RegexParser.matches("(.*) \r\n$", msg);
 					if(!check.isEmpty()) {
-						System.out.println("Check 0: " + check.get(0));
 						System.out.println("Check 1: " + check.get(1));
 						Command c = new Command(this, check.get(1));
-						System.out.println("testing before OutputProcessor.addToInputQueue(c)");
-                              //System.out.println(OutputProcessor.getInputQueue().size());
 						OutputProcessor.addToInputQueue(c);
 						
 						msg = "";

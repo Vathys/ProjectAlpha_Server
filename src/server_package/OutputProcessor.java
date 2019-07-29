@@ -18,15 +18,18 @@ public class OutputProcessor extends Thread {
 
 	public void run() {
 		while (true) {
-			String com;
-			String input;
-			
-			try {
-				com = clientOutputQueue.take();
-				hub.communicateWithClients(com);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+		     Command out;
+		     try
+               {
+                    out = clientInputQueue.take();
+                    
+                    //out.process();
+                    
+                    clientOutputQueue.add(out.response());
+               } catch (InterruptedException e)
+               {
+                    e.printStackTrace();
+               }
 		}
 	}
 
@@ -35,9 +38,7 @@ public class OutputProcessor extends Thread {
 	}
 	
 	public static void addToInputQueue(Command input) {
-	     System.out.println("adding input");
 		clientInputQueue.add(input);
-		System.out.println("input added");
 	}
 	
 	public synchronized static BlockingQueue<Command> getInputQueue() {
@@ -53,4 +54,16 @@ public class OutputProcessor extends Thread {
 		return null;
 	}
 	
+	public static String takeFromOutputQueue()
+	{
+	     try
+          {
+               return clientOutputQueue.take();
+          } catch (InterruptedException e)
+          {
+               // TODO Auto-generated catch block
+               e.printStackTrace();
+          }
+          return null;
+	}
 }

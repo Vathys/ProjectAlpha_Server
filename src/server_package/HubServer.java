@@ -3,7 +3,6 @@ package server_package;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -17,17 +16,13 @@ public class HubServer extends Thread {
 	private ServerSocket server;
 	//List of connected Clients
 	private ArrayList<ClientThread> connectedClients;
-	//
-	private BlockingQueue<String> comClients;
 	//Private class that waits for clients to connect
 	private ClientCollector collector;
 	private BlockingQueue<String> rawCommands;
-	private ArrayList<Files> projectFiles;
 	// private ArrayList<ServerThread> connectedServers;
 
 	public HubServer() {
 		connectedClients = new ArrayList<ClientThread>();
-		comClients = new LinkedBlockingQueue<String>();
 		rawCommands = new LinkedBlockingQueue<String>();
 		ServerSocketFactory fact = ServerSocketFactory.getDefault();
 
@@ -43,25 +38,11 @@ public class HubServer extends Thread {
 
 	public void run() {
 		while (true) {
-		     System.out.println("HubServer run method running...");
 			String com;
-			Command out;
-			out = OutputProcessor.takeFromInputQueue();
-
-			System.out.println(out.response());
-			
-			//processing the Command out
-			
-			OutputProcessor.addToOutputQueue(out.response());
-
-			try {
-				com = comClients.take();
-				for (ClientThread client : connectedClients) {
-					client.talkToClient(com);
-				}
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+		     com = OutputProcessor.takeFromOutputQueue();
+               for (ClientThread client : connectedClients) {
+               	client.talkToClient(com);
+               }
 		}
 	}
 
@@ -76,10 +57,6 @@ public class HubServer extends Thread {
 	private void addClient(ClientThread e) {
 		connectedClients.add(e);
 		connectedClients.get(connectedClients.size() - 1).start();
-	}
-
-	public synchronized void communicateWithClients(String com) {
-		comClients.add(com);
 	}
 
 	private class ClientCollector extends Thread {
