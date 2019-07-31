@@ -17,7 +17,6 @@ import server_package.RegexParser;
 public class ClientThread extends Thread {
 	private Socket client;
 	private ConcurrentLinkedQueue<String> clientCom;
-	private String clientID;
 
 	public ClientThread(Socket client) throws IOException {
 		this.client = client;
@@ -35,7 +34,7 @@ public class ClientThread extends Thread {
 					msg += temp;
 					ArrayList<String> check = RegexParser.matches("(.*) \r\n$", msg);
 					if(!check.isEmpty()) {
-						System.out.println("Check 1: " + check.get(1));
+						System.out.println(check.get(1));
 						Command c = new Command(this, check.get(1));
 						OutputProcessor.addToInputQueue(c);
 						

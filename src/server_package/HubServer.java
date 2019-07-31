@@ -69,7 +69,7 @@ public class HubServer extends Thread {
 		public void run() {
 			try {
 				System.out.println("Waiting for client on port " + hub.server.getLocalPort() + " at address "
-						+ hub.server.getInetAddress().getLocalHost());
+						+ hub.server.getInetAddress().getLocalHost().getHostAddress());
 				while (true) {
 					Socket client = null;
 					client = hub.server.accept();

@@ -10,7 +10,7 @@ public class Command {
 	
 	public Command(ClientThread c, String rawCommand) {
 		this.client = c;
-		commandArgs = rawCommand;
+		commandArgs = rawCommand + " \r\n";
 		/*
 		ArrayList<String> commandMatches = RegexParser.matches("(PRIVMSG) (.+)", rawCommand);
 		if(commandMatches.isEmpty()) {
