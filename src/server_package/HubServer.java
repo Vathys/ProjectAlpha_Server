@@ -38,10 +38,12 @@ public class HubServer extends Thread {
 
 	public void run() {
 		while (true) {
-			String com;
+			Command com;
 		     com = OutputProcessor.takeFromOutputQueue();
                for (ClientThread client : connectedClients) {
-               	client.talkToClient(com);
+                    System.out.println(client.getClient().getInetAddress());
+                    if(client.getClient().getInetAddress().equals(com.sentFrom()))
+                         client.talkToClient(com.output());
                }
 		}
 	}
