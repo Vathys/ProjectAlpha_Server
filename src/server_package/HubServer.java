@@ -1,6 +1,8 @@
 package server_package;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -41,9 +43,10 @@ public class HubServer extends Thread {
 			Command com;
 		     com = OutputProcessor.takeFromOutputQueue();
                for (ClientThread client : connectedClients) {
-                    System.out.println(client.getClient().getInetAddress());
-                    if(client.getClient().getInetAddress().equals(com.sentFrom()))
+                    if(!client.getClient().getInetAddress().equals(com.sentFrom()))
+                    {
                          client.talkToClient(com.output());
+                    }
                }
 		}
 	}
@@ -70,8 +73,9 @@ public class HubServer extends Thread {
 
 		public void run() {
 			try {
-				System.out.println("Waiting for client on port " + hub.server.getLocalPort() + " at address "
-						+ hub.server.getInetAddress().getLocalHost().getHostAddress());
+				hub.server.getInetAddress();
+                    System.out.println("Waiting for client on port " + hub.server.getLocalPort() + " at address "
+						+ "192.168.1.86");
 				while (true) {
 					Socket client = null;
 					client = hub.server.accept();

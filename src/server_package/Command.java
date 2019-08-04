@@ -19,7 +19,7 @@ public class Command
      
      public void process()
      {
-          outputCommand = rawCommand;
+          outputCommand = "{" + rawCommand + "}";
      }
 
      public InetAddress sentFrom()

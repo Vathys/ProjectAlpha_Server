@@ -40,7 +40,7 @@ public class ClientThread extends Thread
                          ArrayList<String> check = RegexParser.matches("^\\{(.*)\\}$", msg);
                          if (!check.isEmpty())
                          {
-                              System.out.println(check.get(1));
+                              //System.out.println(check.get(1));
                               Command c = new Command(this, check.get(1));
                               OutputProcessor.addToInputQueue(c);
 
