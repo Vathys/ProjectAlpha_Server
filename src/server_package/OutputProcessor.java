@@ -6,13 +6,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class OutputProcessor extends Thread
 {
 
-     private HubServer hub;
      private static BlockingQueue<Command> clientOutputQueue;
      private static BlockingQueue<Command> clientInputQueue;
 
      public OutputProcessor(HubServer hub)
      {
-          this.hub = hub;
           clientOutputQueue = new LinkedBlockingQueue<Command>();
           clientInputQueue = new LinkedBlockingQueue<Command>();
           System.out.println("Queues Active");

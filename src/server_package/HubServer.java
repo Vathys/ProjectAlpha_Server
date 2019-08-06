@@ -1,13 +1,9 @@
 package server_package;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import javax.net.ServerSocketFactory;
 
@@ -20,12 +16,10 @@ public class HubServer extends Thread {
 	private ArrayList<ClientThread> connectedClients;
 	//Private class that waits for clients to connect
 	private ClientCollector collector;
-	private BlockingQueue<String> rawCommands;
 	// private ArrayList<ServerThread> connectedServers;
 
 	public HubServer() {
 		connectedClients = new ArrayList<ClientThread>();
-		rawCommands = new LinkedBlockingQueue<String>();
 		ServerSocketFactory fact = ServerSocketFactory.getDefault();
 
 		try {
@@ -53,10 +47,6 @@ public class HubServer extends Thread {
 
 	public ArrayList<ClientThread> getConnectedClients() {
 		return connectedClients;
-	}
-
-	public void addRawCommand(String command) {
-		rawCommands.add(command);
 	}
 
 	private void addClient(ClientThread e) {
