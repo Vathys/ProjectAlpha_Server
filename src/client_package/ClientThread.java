@@ -17,12 +17,20 @@ import server_package.RegexParser;
 public class ClientThread extends Thread
 {
      private Socket client;
+     private ThreadWriter writer;
      private ConcurrentLinkedQueue<String> clientCom;
 
      public ClientThread(Socket client) throws IOException
      {
           this.client = client;
           clientCom = new ConcurrentLinkedQueue<String>();
+          writer = new ThreadWriter(this);
+     }
+
+     public void startThreads()
+     {
+          this.start();
+          writer.start();
      }
 
      public void run()
@@ -40,7 +48,7 @@ public class ClientThread extends Thread
                          ArrayList<String> check = RegexParser.matches("^\\{(.*)\\}$", msg);
                          if (!check.isEmpty())
                          {
-                              //System.out.println(check.get(1));
+                              System.out.println(check.get(1));
                               Command c = new Command(this, check.get(1));
                               OutputProcessor.addToInputQueue(c);
 
@@ -48,27 +56,12 @@ public class ClientThread extends Thread
                          }
                     }
 
-                    if (!clientCom.isEmpty())
-                    {
-                         byte[] encoded = clientCom.poll().getBytes(Charset.forName("UTF-8"));
-                         cpw.println(new String(encoded, Charset.forName("UTF-8")));
-                    }
                }
 
           } catch (IOException e)
           {
                e.printStackTrace();
-          } finally
-          {
-               try
-               {
-                    client.close();
-               } catch (IOException e)
-               {
-                    e.printStackTrace();
-               }
           }
-
      }
 
      public synchronized SocketAddress getClientAddress()
@@ -84,5 +77,35 @@ public class ClientThread extends Thread
      public synchronized void talkToClient(String com)
      {
           clientCom.add(com);
+     }
+
+     private class ThreadWriter extends Thread
+     {
+          ClientThread ct;
+
+          public ThreadWriter(ClientThread ct)
+          {
+               this.ct = ct;
+          }
+
+          @Override
+          public void run()
+          {
+
+               try (PrintWriter cpw = new PrintWriter(ct.client.getOutputStream(), true);)
+               {
+                    while (true)
+                    {
+                         if (!clientCom.isEmpty())
+                         {
+                              byte[] encoded = clientCom.poll().getBytes(Charset.forName("UTF-8"));
+                              cpw.println(new String(encoded, Charset.forName("UTF-8")));
+                         }
+                    }
+               } catch (IOException e)
+               {
+                    e.printStackTrace();
+               }
+          }
      }
 }

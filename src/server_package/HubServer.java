@@ -51,7 +51,7 @@ public class HubServer extends Thread {
 
 	private void addClient(ClientThread e) {
 		connectedClients.add(e);
-		connectedClients.get(connectedClients.size() - 1).start();
+		connectedClients.get(connectedClients.size() - 1).startThreads();
 	}
 
 	private class ClientCollector extends Thread {
