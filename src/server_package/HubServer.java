@@ -42,12 +42,32 @@ public class HubServer extends Thread
           {
                Command com;
                com = OutputProcessor.takeFromOutputQueue();
-               for (ClientThread client : connectedClients)
+               
+               Integer toRemove = null;
+               
+               int size = connectedClients.size();
+               
+               for (int i = 0; i < size; i++)
                {
-                    if (!client.getClient().getInetAddress().equals(com.sentFrom()))
+                    ClientThread client = connectedClients.get(i);
+                    if (com.output() != null)
                     {
-                         client.talkToClient(com.output());
+                         if (!client.getClient().getInetAddress().equals(com.sentFrom()))
+                         {
+                              client.talkToClient(com.output());
+                         }
+                    }else
+                    {
+                         if(client.getClient().getInetAddress().equals(com.sentFrom()))
+                         {
+                              toRemove = Integer.valueOf(i);
+                         }
                     }
+               }
+               if(toRemove != null)
+               {
+                    connectedClients.remove(toRemove.intValue());
+                    System.out.println(com.sentFrom() + " removed");
                }
           }
      }
@@ -86,11 +106,6 @@ public class HubServer extends Thread
                          System.out.println("Connected to " + client.getRemoteSocketAddress());
                          ClientThread ct = new ClientThread(client);
                          hub.addClient(ct);
-
-                         if (hub.getConnectedClients().size() == 1)
-                         {
-                              //Initiate starting the document
-                         }
                     }
                } catch (IOException e)
                {

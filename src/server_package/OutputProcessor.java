@@ -26,7 +26,7 @@ public class OutputProcessor extends Thread
                     out = clientInputQueue.take();
 
                     out.process();
-
+                    
                     clientOutputQueue.add(out);
                } catch (InterruptedException e)
                {

@@ -18,7 +18,13 @@ public class Command
 
      public void process()
      {
-          outputCommand = "{" + rawCommand + "}";
+          if (rawCommand.equals("exit"))
+          {
+               outputCommand = null;
+          } else
+          {
+               outputCommand = "{" + rawCommand + "}";
+          }
      }
 
      public InetAddress sentFrom()
