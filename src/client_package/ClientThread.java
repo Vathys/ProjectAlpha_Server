@@ -24,7 +24,6 @@ public class ClientThread extends Thread
      {
           this.client = client;
           clientCom = new ConcurrentLinkedQueue<String>();
-          writer = new ThreadWriter(this);
      }
 
      public void startThreads()
@@ -46,9 +45,12 @@ public class ClientThread extends Thread
                          temp = (char) cin.read();
                          msg += temp;
                          ArrayList<String> check = RegexParser.matches("^\\{(.*)\\}$", msg);
+                         if (temp == '\n')
+                         {
+                              msg = "";
+                         }
                          if (!check.isEmpty())
                          {
-                              System.out.println(check.get(1));
                               Command c = new Command(this, check.get(1));
                               OutputProcessor.addToInputQueue(c);
 
@@ -81,24 +83,18 @@ public class ClientThread extends Thread
 
      private class ThreadWriter extends Thread
      {
-          ClientThread ct;
-
-          public ThreadWriter(ClientThread ct)
-          {
-               this.ct = ct;
-          }
-
           @Override
           public void run()
           {
 
-               try (PrintWriter cpw = new PrintWriter(ct.client.getOutputStream(), true);)
+               try (PrintWriter cpw = new PrintWriter(client.getOutputStream(), true);)
                {
                     while (true)
                     {
                          if (!clientCom.isEmpty())
                          {
                               byte[] encoded = clientCom.poll().getBytes(Charset.forName("UTF-8"));
+                              //System.out.println("Message sent to Clients: " + new String(encoded, Charset.forName("UTF-8")));
                               cpw.println(new String(encoded, Charset.forName("UTF-8")));
                          }
                     }
