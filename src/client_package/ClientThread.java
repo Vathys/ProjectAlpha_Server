@@ -24,6 +24,7 @@ public class ClientThread extends Thread
      {
           this.client = client;
           clientCom = new ConcurrentLinkedQueue<String>();
+          writer = new ThreadWriter();
      }
 
      public void startThreads()
