@@ -44,11 +44,11 @@ public class ClientThread extends Thread
                     {
                          temp = (char) cin.read();
                          msg += temp;
-                         ArrayList<String> check = RegexParser.matches("^\\{(.*)\\}$", msg);
                          if (temp == '\n')
                          {
                               msg = "";
                          }
+                         ArrayList<String> check = RegexParser.matches("^\\{(.*)\\}$", msg);
                          if (!check.isEmpty())
                          {
                               Command c = new Command(this, check.get(1));
