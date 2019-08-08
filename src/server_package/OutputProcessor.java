@@ -13,29 +13,24 @@ public class OutputProcessor extends Thread
      {
           clientOutputQueue = new LinkedBlockingQueue<Command>();
           clientInputQueue = new LinkedBlockingQueue<Command>();
-          System.out.println("Queues Active");
+          Main.gui.addText("Queues Active");
      }
 
      public void run()
      {
-          while (true)
+          while (!ServerGUI.getServerClosing())
           {
-               Command out;
-               try
+               Command out = clientInputQueue.poll();
+               if(out != null)
                {
-                    out = clientInputQueue.take();
-
                     out.process();
                     
                     clientOutputQueue.add(out);
-               } catch (InterruptedException e)
-               {
-                    e.printStackTrace();
                }
           }
      }
 
-     public static synchronized void addToOutputQueue(Command com)
+     public static void addToOutputQueue(Command com)
      {
           clientOutputQueue.add(com);
      }
@@ -45,32 +40,18 @@ public class OutputProcessor extends Thread
           clientInputQueue.add(input);
      }
 
-     public synchronized static BlockingQueue<Command> getInputQueue()
+     public static BlockingQueue<Command> getInputQueue()
      {
           return clientInputQueue;
      }
 
-     public synchronized static Command takeFromInputQueue()
+     public static Command takeFromInputQueue()
      {
-          try
-          {
-               return clientInputQueue.take();
-          } catch (InterruptedException e)
-          {
-               e.printStackTrace();
-          }
-          return null;
+          return clientInputQueue.poll();
      }
 
      public static Command takeFromOutputQueue()
      {
-          try
-          {
-               return clientOutputQueue.take();
-          } catch (InterruptedException e)
-          {
-               e.printStackTrace();
-          }
-          return null;
+          return clientOutputQueue.poll();
      }
 }
