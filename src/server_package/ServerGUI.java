@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.WindowConstants;
 
@@ -25,10 +26,13 @@ public class ServerGUI extends JFrame
           lis = new CustomListener();
           closingServer = false;
 
+          
           textArea = new JTextArea();
           textArea.setPreferredSize(new Dimension(500, 200));
           textArea.setEditable(false);
-          add(textArea, BorderLayout.CENTER);
+          JScrollPane sp = new JScrollPane(textArea);
+          
+          add(sp, BorderLayout.CENTER);
 
           JPanel buttonPane = new JPanel(new FlowLayout(FlowLayout.CENTER));
           buttonPane.setPreferredSize(new Dimension(500, 100));
