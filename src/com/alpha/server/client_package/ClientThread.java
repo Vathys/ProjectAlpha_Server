@@ -1,4 +1,4 @@
-package client_package;
+package com.alpha.server.client_package;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,10 +10,10 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import server_package.Command;
-import server_package.OutputProcessor;
-import server_package.RegexParser;
-import server_package.ServerGUI;
+import com.alpha.server.Command;
+import com.alpha.server.OutputProcessor;
+import com.alpha.server.RegexParser;
+import com.alpha.server.ServerGUI;
 
 public class ClientThread extends Thread
 {

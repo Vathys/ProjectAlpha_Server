@@ -1,4 +1,4 @@
-package server_package;
+package com.alpha.server;
 
 public class Main
 {

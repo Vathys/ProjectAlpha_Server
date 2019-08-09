@@ -1,8 +1,8 @@
-package server_package;
+package com.alpha.server;
 
 import java.net.InetAddress;
 
-import client_package.ClientThread;
+import com.alpha.server.client_package.ClientThread;
 
 public class Command
 {

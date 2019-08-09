@@ -1,4 +1,4 @@
-package server_package;
+package com.alpha.server;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -16,7 +16,7 @@ import javax.swing.event.DocumentEvent.EventType;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
-import client_package.ClientThread;
+import com.alpha.server.client_package.ClientThread;
 
 public class HubServer extends Thread
 {

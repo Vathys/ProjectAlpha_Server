@@ -1,4 +1,4 @@
-package server_package;
+package com.alpha.server;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;

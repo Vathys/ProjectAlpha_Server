@@ -1,4 +1,4 @@
-package server_package;
+package com.alpha.server;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
